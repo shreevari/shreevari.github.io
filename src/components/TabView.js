@@ -5,7 +5,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -15,6 +14,9 @@ import Button from "@material-ui/core/Button";
 
 import avatar from "../static/avatar.jpg";
 import { TabData } from "../data.js";
+
+import TabPanel from "./TabPanel.js";
+
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
@@ -26,13 +28,6 @@ const useStyles = makeStyles({
   },
 });
 
-const boxStyles = makeStyles({
-  root: {
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
-  },
-});
 const avatarStyles = makeStyles({
   root: {
     width: 300,
@@ -56,37 +51,6 @@ const tabStyles = makeStyles({
   },
 });
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-  const boxClasses = boxStyles();
-
-  if (value === index)
-    return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          flexGrow: 1,
-          justifyContent: "center",
-        }}
-        {...other}
-      >
-        <Box classes={boxClasses}>{children}</Box>
-      </div>
-    );
-  else return <div />;
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
-
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -100,18 +64,18 @@ export default function TabView() {
   const cardClasses = cardStyles();
   const tabClasses = tabStyles();
 
-  const [value, setValue] = React.useState(0);
+  const [activeTabIdx, setActiveTabIdx] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const activateTab = (event, newActiveTab) => {
+    setActiveTabIdx(newActiveTab);
   };
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Tabs
-          value={value}
-          onChange={handleChange}
+          value={activeTabIdx}
+          onChange={activateTab}
           aria-label="Navigation tabs"
         >
           {TabData.map((tabData, index) => {
@@ -126,7 +90,7 @@ export default function TabView() {
         </Tabs>
       </AppBar>
 
-      <TabPanel value={value} index={0}>
+      <TabPanel value={activeTabIdx} tabIdx={0}>
         <Avatar alt="Shreevari SP" src={avatar} classes={avatarClasses} />
         <Card classes={cardClasses}>
           <CardContent>
@@ -164,7 +128,7 @@ export default function TabView() {
         </Card>
       </TabPanel>
 
-      <TabPanel value={value} index={1}>
+      <TabPanel value={activeTabIdx} tabIdx={1}>
         {TabData[1].posts.map((post, index) => {
           return (
             <Card classes={cardClasses}>
@@ -192,7 +156,7 @@ export default function TabView() {
         })}
       </TabPanel>
 
-      <TabPanel value={value} index={2}>
+      <TabPanel value={activeTabIdx} tabIdx={2}>
         <Typography>Oh, don't you worry! This will come soon(TM).</Typography>
       </TabPanel>
     </div>
