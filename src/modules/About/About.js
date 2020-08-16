@@ -11,6 +11,7 @@ import { avatar as avatarStyles } from "./styles.js";
 
 import Name from "../utils/name.js";
 import avatarImage from "../../static/avatar.jpg";
+import resume from "../../static/resume.pdf";
 
 const About = (props) => {
   const { name, bio, contacts } = props;
@@ -45,8 +46,9 @@ const About = (props) => {
           );
         })}
       </Card>
-
-      <Button>Download Resume</Button>
+      <a href={resume} download>
+        <Button>Download Resume</Button>
+      </a>
     </div>
   );
 };
